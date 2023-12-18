@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <title>Image Processing Result</title>
+</head>
+<body style="font-family: 'Comic Sans MS', cursive; background: linear-gradient(135deg, #FFB6C1, #87CEFA); color: #333; text-align: center; padding: 20px;">
+
+    <h1 style="color: #3498db; font-size: 2em;">Processed Image</h1>
+    <img src="data:image/jpeg;base64,{{ processed_image[0] }}" alt="Processed Image" style="max-width: 100%; height: auto; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); border-radius: 15px; margin-bottom: 20px;">
+
+    <h2 style="color: #e74c3c; margin-top: 20px; font-size: 1.8em;">Filter Images</h2>
+    <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; margin-top: 15px;">
+        <img src="data:image/jpeg;base64,{{ processed_image[1] }}" alt="Filtered Image 1" style="max-width: 18%; height: auto; border-radius: 15px; margin-bottom: 15px;">
+        <img src="data:image/jpeg;base64,{{ processed_image[2] }}" alt="Filtered Image 2" style="max-width: 18%; height: auto; border-radius: 15px; margin-bottom: 15px;">
+        <img src="data:image/jpeg;base64,{{ processed_image[3] }}" alt="Filtered Image 3" style="max-width: 18%; height: auto; border-radius: 15px; margin-bottom: 15px;">
+        <img src="data:image/jpeg;base64,{{ processed_image[4] }}" alt="Filtered Image 4" style="max-width: 18%; height: auto; border-radius: 15px; margin-bottom: 15px;">
+        <img src="data:image/jpeg;base64,{{ processed_image[5] }}" alt="Filtered Image 5" style="max-width: 18%; height: auto; border-radius: 15px; margin-bottom: 15px;">
+        <!-- Add more as needed -->
+    </div>
+
+    {% if processed_image[6] %}
+        <h2 style="color: #27ae60; margin-top: 20px; font-size: 1.8em;">Rice Grain Information</h2>
+        <table border="1" style="margin: 20px auto; border-collapse: collapse; background-color: #fff; border-radius: 15px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);">
+            <thead>
+                <tr>
+                    <th style="padding: 15px; background-color: #3498db; color: #fff;">Aspect Ratio</th>
+                    <th style="padding: 15px; background-color: #3498db; color: #fff;">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for info in processed_image[6] %}
+                    <tr>
+                        <td style="padding: 15px;">{{ info[0] }}</td>
+                        <td style="padding: 15px;">{{ info[1] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p style="font-size: 2em; color: #333; margin-bottom: 30px; font-weight: bold;">Average Aspect Ratio: {{ processed_image[7] }} ({{ get_classification(processed_image[7]) }})</p>
+    {% endif %}
+
+<!-- Add this inside the body where you want the chart to appear -->
+<canvas id="riceChart" style="width: 20%;"></canvas>
+<!-- Add this script section after including Chart.js -->
+<script>
+    // Get the data from the server-side
+    var counts = JSON.parse('{{ processed_image[8]|tojson }}');
+
+    // Create a bar chart
+    var ctx = document.getElementById('riceChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(counts),
+            datasets: [{
+                label: 'Number of Grains',
+                data: Object.values(counts),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% if processed_image %}
+    <!-- ... Other content ... -->
+    <h2 style="color: #e74c3c; margin-top: 20px; font-size: 1.8em;">Grain Percentage</h2>
+    <p style="font-size: 2em; color: #333; margin-bottom: 30px; font-weight: bold;">Dust Percentage: {{ processed_image[9] }}%</p>
+    <p style="font-size: 2em; color: #333; margin-bottom: 30px; font-weight: bold;">Rice Grain Percentage: {{ processed_image[10] }}%</p>
+{% endif %}
+
+</body>
+</html>

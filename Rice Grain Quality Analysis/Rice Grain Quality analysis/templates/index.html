@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Rice Grain Quality Analysis</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #3498db, #2ecc71); /* Gradient background */
+            color: #fff;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #000; /* Change color to black */
+        }
+
+        form {
+            margin: 20px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+            color: #333;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #fff;
+            color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Rice Grain Quality Analysis</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept=".png, .jpg, .jpeg" required>
+        <button type="submit">✨ Process Image ✨</button>
+    </form>
+
+    {% if processed_image %}
+    <h2>Magical Results</h2>
+    <img src="data:image/jpg;base64,{{ processed_image[0] }}" alt="Original Image">
+    <img src="data:image/jpg;base64,{{ processed_image[1] }}" alt="Filtered Image 1">
+    <img src="data:image/jpg;base64,{{ processed_image[2] }}" alt="Filtered Image 2">
+    <img src="data:image/jpg;base64,{{ processed_image[3] }}" alt="Filtered Image 3">
+    <img src="data:image/jpg;base64,{{ processed_image[4] }}" alt="Filtered Image 4">
+    <img src="data:image/jpg;base64,{{ processed_image[5] }}" alt="Filtered Image 5">
+    {% endif %}
+</body>
+</html>
